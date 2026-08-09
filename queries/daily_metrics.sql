@@ -9,3 +9,11 @@ sum(quantity)/count(distinct o.order_id) as Items_per_Order_created
 from sandbox.orders o join sandbox.order_details od on o.order_id = od.order_id
 group by date(date_created) 
 limit 100
+
+-- Введение метрики ARPPU
+  
+select sum(quantity*price)/count(distinct o.order_id) as AOV_created,
+count(distinct o.customer_id) as active_customers,
+sum(quantity*price)/count(distinct o.customer_id) as arppu
+from sandbox.orders o join sandbox.order_details od on o.order_id = od.order_id
+where date_created::date between '2018-07-09' and '2018-07-15'
