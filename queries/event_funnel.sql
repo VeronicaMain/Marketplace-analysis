@@ -25,7 +25,7 @@ and event_time >= '2019-11-01'
 and event_time <  '2019-12-01'
 
 -- Конверсия сессий в покупку по дням
-select dt
+select dt, conversion_percent
 from (
 select date(event_time) as dt,
 count(*) as total_sessions,
