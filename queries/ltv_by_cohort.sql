@@ -9,18 +9,18 @@ select cs.cohort_month, cs.first_order_date ,o.date_paid, od.seller_id, od.quant
 from orders o join order_details od on o.order_id = od.order_id 
 join cohort_sellers cs on cs.seller_id = od.seller_id),
 six_months_sales as (
-SELECT *
-FROM cohort_sales
-WHERE date_paid < first_order_date + INTERVAL '6 months'
-AND date_paid IS NOT null),
-ltv_by_cohort AS (
+select *
+from cohort_sales
+where date_paid < first_order_date + interval '6 months'
+and date_paid is not null),
+ltv_by_cohort as (
 select cohort_month,
-COUNT(DISTINCT seller_id) AS sellers_in_cohort,
-SUM(margin) AS total_margin_6m,
-ROUND(SUM(margin) * 1.0 / NULLIF(COUNT(DISTINCT seller_id), 0),2) AS ltv_per_seller
-FROM six_months_sales
-GROUP BY cohort_month
+count(distinct seller_id) as sellers_in_cohort,
+sum(margin) as total_margin_6m,
+round(sum(margin) * 1.0 / nullif(count(distinct seller_id), 0),2) as ltv_per_seller
+from six_months_sales
+group by cohort_month
 )
-SELECT cohort_month
-FROM ltv_by_cohort
-ORDER BY ltv_per_seller DESC
+select cohort_month, sellers_in_cohort, ltv_per_seller
+from ltv_by_cohort
+order by ltv_per_seller desc
