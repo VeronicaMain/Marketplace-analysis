@@ -9,7 +9,7 @@ sum(quantity*price*commission) as margin
 from sandbox.orders o join sandbox.order_details od on o.order_id = od.order_id
 where date_paid::date between '2018-07-09' and '2018-07-15'
 
--- Дневная версия margin_per_order
+-- Версия margin_per_order по дням
 select date(date_paid) as date_paid,
 count(distinct od.order_id) as paid_orders,
 sum(quantity*price) as gmv_paid,
