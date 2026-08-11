@@ -10,7 +10,7 @@ sum(case when event_type = 'purchase' then price end) as gmv_created
 from sandbox.events_201911
 group by date(event_time)
 
--- MAU (monthly active users) 
+-- MAU (monthly active users) за ноябрь 2019
 select count(distinct user_id) as mac
 from sandbox.events_201911
 where event_time >= '2019-11-01'
@@ -24,7 +24,7 @@ where event_type = 'purchase'
 and event_time >= '2019-11-01'
 and event_time <  '2019-12-01'
 
--- Конверсия по дням
+-- Конверсия сессий в покупку по дням
 select dt
 from (
 select date(event_time) as dt,
