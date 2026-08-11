@@ -1,5 +1,6 @@
 -- Рост маржинальности неделя к неделе
-select *, round((margin_cur/margin_prev - 1) * 100, 1) as margin_growth
+select w_date, margin, gmv, lag(margin) over (order by w_date) as margin_prev_week,
+round((margin/nullif(lag(margin) over (order by w_date),0) - 1) * 100, 1) as margin_growth_percent
 from (
 select w_date, margin as margin_prev, gmv as gmv_prev,
 lead(margin) over(order by w_date) as margin_cur
@@ -9,8 +10,9 @@ sum(quantity * price * commission) as margin,
 sum(quantity * price) as gmv
 from sandbox.orders as o
 inner join sandbox.order_details as od on o.order_id = od.order_id
-group by date_trunc('week', date_paid)) as t1 ) as t2
-where w_date = '2018-07-02'
+where date_paid is not null
+group by date_trunc('week', date_paid)::date ) as weekly
+order by w_date
 
 -- margin_per_order версия по месяцам
 select date_trunc('month', date_paid)::date as m_date,
