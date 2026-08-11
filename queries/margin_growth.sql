@@ -21,5 +21,6 @@ count(distinct o.order_id) as cnt_orders,
 round(sum(quantity * price * commission) / count(distinct o.order_id), 2) as margin_per_order
 from sandbox.orders as o
 inner join sandbox.order_details as od on o.order_id = od.order_id
+where date_paid is not null
 group by date_trunc('month', date_paid)::date
 order by 4 desc
